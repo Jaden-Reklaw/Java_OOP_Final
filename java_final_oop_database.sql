@@ -57,6 +57,54 @@ END$$
 DELIMITER ;
 
 -- INSERT, UPDATE & DELETE FILE
+DELIMITER $$
+CREATE DEFINER=`root`@`localhost` PROCEDURE `USP_ExecFile`(
+	IN QueryID INT,
+    IN FileID INT,
+    IN FileName VARCHAR(50),
+    IN FileType VARCHAR(5),
+    IN FileSize VARCHAR(50),
+    IN FilePath VARCHAR(500),
+    IN DirectoryID INT
+)
+BEGIN
+	-- START INSERT
+	IF(QueryID = 10) THEN
+		BEGIN
+			INSERT INTO File(FileName, FileType, FileSize, FilePath, DirectoryID)
+            VALUES(FileName, FileType, FileSize, FilePath, DirectoryID);
+            SELECT LAST_INSERT_ID();
+        END;
+    -- FINISH INSERT
+    
+    -- START UPDATE
+    ELSEIF(QueryID = 20) THEN
+		BEGIN
+			UPDATE File a SET
+            a.FileName = IFNULL(FileName, a.FileName),
+            a.FileType = IFNULL(FileType, a.FileType),
+            a.FileSize = IFNULL(FileSize, a.FileSize),
+            a.FilePath = IFNULL(FilePath, a.FilePath),
+            a.DirectoryID = IFNULL(DirectoryID, aDirectoryID)
+            WHERE a.FileID = FileID;
+            SELECT ROW_COUNT();
+        END;
+    -- FINISH UDPATE
+    
+    -- START DELETE
+	ELSEIF(QueryID = 30) THEN
+		BEGIN
+			DELETE FROM File a
+            WHERE a.FileID = FileID;
+            SELECT ROW_COUNT();
+        END;
+    -- FINISH DELETE
+    
+    -- TERMINATE IF STATEMENTS
+    END IF;
+END$$
+DELIMITER ;
+
 
 
 -- CRUD STORED PROCEDURE FOR DIRECTORY TABLE
