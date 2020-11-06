@@ -12,7 +12,7 @@ public class Main {
     public static void main(String[] args) {
 	// 2. Create a new project in IntelliJ, structure should be similar to OOP project
         System.out.println("Testing Main!");
-        TestDirectoryDAO();
+        //TestDirectoryDAO();
     }
 
     public static void TestDirectoryDAO() {
@@ -72,5 +72,9 @@ public class Main {
             System.out.println("Failed to remove Directory from Database!");
         }
         //endregion
+    }
+
+    public static void TestFileDAO() {
+
     }
 }

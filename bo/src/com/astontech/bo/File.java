@@ -13,7 +13,8 @@ public class File extends Directory{
 
     // region Constructors
     public File() {} //Default Constructor
-    public File(String fileName, String fileType, int fileSize, String filePath, int directoryID) {
+    public File(int fileID, String fileName, String fileType, int fileSize, String filePath, int directoryID) {
+        this.setFileID(fileID);
         this.setFileName(fileName);
         this.setFileType(fileType);
         this.setFileSize(fileSize);
