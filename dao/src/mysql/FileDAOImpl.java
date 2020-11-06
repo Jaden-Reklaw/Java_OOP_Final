@@ -63,7 +63,33 @@ public class FileDAOImpl extends MySQL implements FileDAO {
 
     @Override
     public int insertFile(File file) {
-        return 0;
+        //Connect to database
+        Connect();
+        int id = 0; //thing to change on return
+
+        try {
+            //CALL USP_ExecFile(QueryID, FileID, FileName, FileType, FileSize, FilePath, DirectoryID)
+            String storeProcedure = "{CALL USP_ExecFile(?, ?, ?, ?, ?, ?, ?)}";
+            CallableStatement statement = connection.prepareCall(storeProcedure);
+
+            statement.setInt(1, INSERT);
+            statement.setInt(2, 0);
+            statement.setString(3, file.getFileName());
+            statement.setString(4, file.getFileType());
+            statement.setInt(5, file.getFileSize());
+            statement.setString(6, file.getFilePath());
+            statement.setInt(7, file.getDirectoryID());
+
+            //Execute query and get last id created
+            ResultSet rs = statement.executeQuery();
+            if(rs.next()) {
+                id = rs.getInt(1);
+            }
+
+        } catch (SQLException ex) {
+            System.out.println(ex);
+        }
+        return id;
     }
 
     @Override
