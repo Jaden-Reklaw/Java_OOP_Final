@@ -11,5 +11,6 @@
     <orderEntry type="library" name="mysql-connector-java-8.0.11" level="project" />
     <orderEntry type="module" module-name="dao" />
     <orderEntry type="module" module-name="bo" />
+    <orderEntry type="module" module-name="common" />
   </component>
 </module>

@@ -4,19 +4,64 @@ import com.astontech.bo.Directory;
 import com.astontech.bo.File;
 import com.astontech.dao.DirectoryDAO;
 import com.astontech.dao.FileDAO;
+import common.helpers.StringHelper;
 import mysql.DirectoryDAOImpl;
 import mysql.FileDAOImpl;
 
+import javax.sound.midi.Soundbank;
+import java.io.IOException;
 import java.util.Date;
 import java.util.List;
+import java.util.Scanner;
 
 public class Main {
 
     public static void main(String[] args) {
-	// 2. Create a new project in IntelliJ, structure should be similar to OOP project
-        System.out.println("Testing Main!");
-        //TestDirectoryDAO();
-        TestFileDAO();
+	    // 2. Create a new project in IntelliJ, structure should be similar to OOP project
+
+        /*
+            5. Create a menu driven console application that allow the following:
+        a. Prompts the user for a starting directory
+        b. The application would then recursively collect the following and store them in appropriate db entitity
+            i. File Name
+            ii. File Type
+            iii. File Size
+            iv. File Path
+            v. Directory Name
+            vi. Directory Size (in MB)
+            vii. Number of Files in Directory
+            viii. Directory Path
+        */
+
+        //
+        Scanner reader = new Scanner(System.in);
+        System.out.println("Please select a starting directory: ");
+        String dir = reader.nextLine();
+
+        recursionFiles(new java.io.File(dir));
+
+    }
+
+    private static void recursionFiles(java.io.File dir) {
+        try{
+            java.io.File[] files = dir.listFiles();
+
+            for(java.io.File file : files) {
+                if(file.isDirectory()){
+                    // Recursion happens here
+                    System.out.println("Directory Name: " + file.getName());
+                    System.out.println("Directory Path: " + file.getCanonicalPath());
+                    recursionFiles(file);
+                } else {
+                    System.out.println("    File Name: " + file.getName());
+                    System.out.println("    File Name: " + StringHelper.getExtension(file.getName()));
+                    System.out.println("    File Size: " + file.getTotalSpace());
+                    System.out.println("    File Path: " + file.getCanonicalPath());
+                }
+            }
+        } catch (IOException ex) {
+            System.out.println(ex);
+        }
     }
 
     public static void TestDirectoryDAO() {
@@ -66,7 +111,7 @@ public class Main {
         }
         //endregion
         */
-
+    /*
         //region Test Delete Directory
         DirectoryDAO directoryDAO3 = new DirectoryDAOImpl();
 
@@ -76,6 +121,8 @@ public class Main {
             System.out.println("Failed to remove Directory from Database!");
         }
         //endregion
+
+     */
     }
 
     public static void TestFileDAO() {
@@ -138,6 +185,5 @@ public class Main {
             System.out.println("Failed to remove File from Database!");
         }
         //endregion
-
     }
 }
