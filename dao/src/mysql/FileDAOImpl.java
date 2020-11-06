@@ -7,6 +7,7 @@ import com.astontech.dao.FileDAO;
 import java.sql.CallableStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 
 public class FileDAOImpl extends MySQL implements FileDAO {
@@ -37,7 +38,27 @@ public class FileDAOImpl extends MySQL implements FileDAO {
 
     @Override
     public List<File> getFileList() {
-        return null;
+        //connect to database from MySQL class using connect method
+        Connect();
+        //not instantiated since if no records returned don't use memory
+        List<File> fileList = new ArrayList<File>();
+
+        try {
+            String storeProcedure = "{CALL USP_GetFile(?, ?)}";
+            CallableStatement cStmt = connection.prepareCall(storeProcedure);
+
+            cStmt.setInt(1, GET_COLLECTION);
+            cStmt.setInt(2, 0);
+            ResultSet rs = cStmt.executeQuery();
+
+            while(rs.next()) {
+                fileList.add(HydrateObject(rs));
+            }
+        } catch (SQLException ex) {
+            logger.error(ex);
+        }
+
+        return fileList;
     }
 
     @Override
