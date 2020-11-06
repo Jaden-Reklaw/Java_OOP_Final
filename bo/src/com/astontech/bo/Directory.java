@@ -12,7 +12,8 @@ public class Directory {
 
     // region Constructors
     public Directory() {} //Default Constructor
-    public Directory(String directoryName, int directorySize, int numberOfFiles, String directoryPath) {
+    public Directory(int directoryID ,String directoryName, int directorySize, int numberOfFiles, String directoryPath) {
+        this.setDirectoryID(directoryID);
         this.setDirectoryName(directoryName);
         this.setDirectorySize(directorySize);
         this.setNumberOfFiles(numberOfFiles);

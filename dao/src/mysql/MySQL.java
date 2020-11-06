@@ -8,7 +8,7 @@ import java.sql.SQLException;
 
 public abstract class MySQL {
     protected static String dbHost = "localhost";
-    protected static String dbName = "aston_database";
+    protected static String dbName = "final_oop";
     protected static String dbUser = "consoleUser";
     protected static String dbPass = "Password1@";
     protected static String useSSL = "false";
