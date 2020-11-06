@@ -94,12 +94,64 @@ public class FileDAOImpl extends MySQL implements FileDAO {
 
     @Override
     public boolean updateFile(File file) {
-        return false;
+        //Connect to database
+        Connect();
+        int id = 0; //thing to change on return
+
+        try {
+            //CALL USP_ExecFile(QueryID, FileID, FileName, FileType, FileSize, FilePath, DirectoryID)
+            String storeProcedure = "{CALL USP_ExecFile(?, ?, ?, ?, ?, ?, ?)}";
+            CallableStatement statement = connection.prepareCall(storeProcedure);
+
+            statement.setInt(1, UPDATE);
+            statement.setInt(2, file.getFileID());
+            statement.setString(3, file.getFileName());
+            statement.setString(4, file.getFileType());
+            statement.setInt(5, file.getFileSize());
+            statement.setString(6, file.getFilePath());
+            statement.setInt(7, file.getDirectoryID());
+
+            //Execute query and get last id created
+            ResultSet rs = statement.executeQuery();
+            if(rs.next()) {
+                id = rs.getInt(1);
+            }
+
+        } catch (SQLException ex) {
+            System.out.println(ex);
+        }
+        return id > 0;
     }
 
     @Override
     public boolean deleteFile(int fileID) {
-        return false;
+        //Connect to database
+        Connect();
+        int id = 0; //thing to change on return
+
+        try {
+            //CALL USP_ExecFile(QueryID, FileID, FileName, FileType, FileSize, FilePath, DirectoryID)
+            String storeProcedure = "{CALL USP_ExecFile(?, ?, ?, ?, ?, ?, ?)}";
+            CallableStatement statement = connection.prepareCall(storeProcedure);
+
+            statement.setInt(1, DELETE);
+            statement.setInt(2, fileID);
+            statement.setString(3, "");
+            statement.setString(4, "");
+            statement.setInt(5, 0);
+            statement.setString(6, "");
+            statement.setInt(7, 0);
+
+            //Execute query and get last id created
+            ResultSet rs = statement.executeQuery();
+            if(rs.next()) {
+                id = rs.getInt(1);
+            }
+
+        } catch (SQLException ex) {
+            System.out.println(ex);
+        }
+        return id > 0;
     }
 
     private static File HydrateObject(ResultSet rs) throws SQLException {
