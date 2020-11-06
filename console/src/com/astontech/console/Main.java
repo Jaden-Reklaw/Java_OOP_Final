@@ -4,6 +4,7 @@ import com.astontech.bo.Directory;
 import com.astontech.bo.File;
 import com.astontech.dao.DirectoryDAO;
 import com.astontech.dao.FileDAO;
+import common.helpers.MathHelper;
 import common.helpers.StringHelper;
 import mysql.DirectoryDAOImpl;
 import mysql.FileDAOImpl;
@@ -23,14 +24,11 @@ public class Main {
             5. Create a menu driven console application that allow the following:
         a. Prompts the user for a starting directory
         b. The application would then recursively collect the following and store them in appropriate db entitity
-            i. File Name
-            ii. File Type
-            iii. File Size
-            iv. File Path
             v. Directory Name
             vi. Directory Size (in MB)
             vii. Number of Files in Directory
             viii. Directory Path
+
         */
 
         //
@@ -49,14 +47,20 @@ public class Main {
             for(java.io.File file : files) {
                 if(file.isDirectory()){
                     // Recursion happens here
-                    System.out.println("Directory Name: " + file.getName());
-                    System.out.println("Directory Path: " + file.getCanonicalPath());
+                    //Values to put into Directory Object
+                    //DirectoryName, DirectorySize, NumberOfFiles, DirectoryPath
+                    Directory directory = new Directory(0, file.getName(), file.length(), file.listFiles().length, file.getCanonicalPath());
+
+                    DirectoryDAO directoryDAO = new DirectoryDAOImpl();
+                    int id = directoryDAO.insertDirectory(directory);
                     recursionFiles(file);
                 } else {
-                    System.out.println("    File Name: " + file.getName());
-                    System.out.println("    File Name: " + StringHelper.getExtension(file.getName()));
-                    System.out.println("    File Size: " + file.getTotalSpace());
-                    System.out.println("    File Path: " + file.getCanonicalPath());
+                    //Values to put into File Object
+                    //FileName, FileType, FileSize, FilePath
+                    File fileObj = new File(0, file.getName(), StringHelper.getExtension(file.getName()), file.length(), file.getCanonicalPath());
+
+                    FileDAO fileDAO = new FileDAOImpl();
+                    int id = fileDAO.insertFile(fileObj);
                 }
             }
         } catch (IOException ex) {
@@ -84,17 +88,17 @@ public class Main {
         System.out.println("===============================");
         //endregion
 
-        /*
+
         //region Test Insert Directory
         //(int directoryID,String directoryName, int directorySize, int numberOfFiles, String directoryPath)
         Directory directory1 = new Directory(0, "TopSecretFiles", 200, 2, "/home/user1/Desktop");
 
-        DirectoryDAO directoryDAO1 = new DirectoryDAOImpl();//??? what is this
+        DirectoryDAO directoryDAO1 = new DirectoryDAOImpl();
         int id = directoryDAO1.insertDirectory(directory1);
 
         System.out.println("New Directory Record Inserted. ID: " + id );
         //endregion
-        */
+
         /*
         //region Test Update Directory
         //Create instance of Directory Data Access Object
@@ -148,7 +152,7 @@ public class Main {
         /*
         //region Test Insert File
         //(int fileID, String fileName, String fileType, int fileSize, String filePath, int directoryID)
-        File file1 = new File(0, "Operation_Gum_Drop", ".txt", 20, "/home/user1/Desktop/Operation_Gum_Drop.txt", 6);
+        File file1 = new File(0, "Operation_Gum_Drop", ".txt", 20, "/home/user1/Desktop/Operation_Gum_Drop.txt");
 
         FileDAO fileDAO1 = new FileDAOImpl();//??? what is this
         int id = fileDAO1.insertFile(file1);

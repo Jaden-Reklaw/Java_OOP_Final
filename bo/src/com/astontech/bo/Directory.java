@@ -5,14 +5,14 @@ public class Directory {
     // region Properties
     private int DirectoryID;
     private String DirectoryName;
-    private int DirectorySize;
+    private long DirectorySize;
     private int NumberOfFiles;
     private String DirectoryPath;
     // endregion
 
     // region Constructors
     public Directory() {} //Default Constructor
-    public Directory(int directoryID ,String directoryName, int directorySize, int numberOfFiles, String directoryPath) {
+    public Directory(int directoryID ,String directoryName, long directorySize, int numberOfFiles, String directoryPath) {
         this.setDirectoryID(directoryID);
         this.setDirectoryName(directoryName);
         this.setDirectorySize(directorySize);
@@ -38,11 +38,11 @@ public class Directory {
         DirectoryName = directoryName;
     }
 
-    public int getDirectorySize() {
+    public long getDirectorySize() {
         return DirectorySize;
     }
 
-    public void setDirectorySize(int directorySize) {
+    public void setDirectorySize(long directorySize) {
         DirectorySize = directorySize;
     }
 

@@ -12,7 +12,7 @@ CREATE TABLE File(
 	FileID INT NOT NULL AUTO_INCREMENT,
     FileName VARCHAR(50) DEFAULT NULL,
     FileType VARCHAR(5) DEFAULT NULL,
-    FileSize INT DEFAULT NULL,
+    FileSize BIGINT DEFAULT NULL,
     FilePath VARCHAR(500) DEFAULT NULL,
     DirectoryID INT DEFAULT NULL,
     PRIMARY KEY(FileID),
@@ -23,7 +23,7 @@ CREATE TABLE File(
 CREATE TABLE Directory(
 	DirectoryID INT NOT NULL AUTO_INCREMENT,
     DirectoryName VARCHAR(50) DEFAULT NULL,
-    DirectorySize INT DEFAULT NULL,
+    DirectorySize BIGINT DEFAULT NULL,
     NumberOfFiles INT DEFAULT 0,
     DirectoryPath VARCHAR(500) DEFAULT NULL,
     PRIMARY KEY(DirectoryID)
@@ -63,7 +63,7 @@ CREATE DEFINER=`root`@`localhost` PROCEDURE `USP_ExecFile`(
     IN FileID INT,
     IN FileName VARCHAR(50),
     IN FileType VARCHAR(5),
-    IN FileSize INT,
+    IN FileSize BIGINT,
     IN FilePath VARCHAR(500),
     IN DirectoryID INT
 )
@@ -139,7 +139,7 @@ CREATE DEFINER=`root`@`localhost` PROCEDURE `USP_ExecDirectory`(
 	IN QueryID INT,
 	IN DirectoryID INT,
     IN DirectoryName VARCHAR(50),
-    IN DirectorySize INT,
+    IN DirectorySize BIGINT,
     IN NumberOfFiles INT,
     IN DirectoryPath VARCHAR(500)
 )
@@ -208,3 +208,7 @@ CALL `final_oop`.`USP_GetDirectory`(20, 0);
 CALL `final_oop`.`USP_GetDirectory`(10, 3);
 CALL `final_oop`.`USP_GetFile`(20, 0);
 CALL `final_oop`.`USP_GetFile`(10, 2);
+
+-- Clear All tables data
+DELETE FROM File;
+DELETE FROM Directory;

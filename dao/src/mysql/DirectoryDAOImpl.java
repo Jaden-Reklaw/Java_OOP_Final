@@ -29,10 +29,11 @@ public class DirectoryDAOImpl extends MySQL implements DirectoryDAO {
             if(rs.next()) {
                 directory = HydrateObject(rs);
             }
+            connection.close();
         } catch (SQLException ex) {
             logger.error(ex);
-        }
 
+        }
         return directory;
     }
 
@@ -54,10 +55,11 @@ public class DirectoryDAOImpl extends MySQL implements DirectoryDAO {
             while(rs.next()) {
                 directoryList.add(HydrateObject(rs));
             }
+            connection.close();
         } catch (SQLException ex) {
             logger.error(ex);
-        }
 
+        }
         return directoryList;
     }
 
@@ -75,7 +77,7 @@ public class DirectoryDAOImpl extends MySQL implements DirectoryDAO {
             statement.setInt(1, INSERT);
             statement.setInt(2, 0);
             statement.setString(3, directory.getDirectoryName());
-            statement.setInt(4, directory.getDirectorySize());
+            statement.setLong(4, directory.getDirectorySize());
             statement.setInt(5, directory.getNumberOfFiles());
             statement.setString(6, directory.getDirectoryPath());
 
@@ -83,10 +85,12 @@ public class DirectoryDAOImpl extends MySQL implements DirectoryDAO {
             ResultSet rs = statement.executeQuery();
             if(rs.next()) {
                 id = rs.getInt(1);
-            }
 
+            }
+            connection.close();
         } catch (SQLException ex) {
             System.out.println(ex);
+
         }
         return id;
     }
@@ -105,7 +109,7 @@ public class DirectoryDAOImpl extends MySQL implements DirectoryDAO {
             statement.setInt(1, UPDATE);
             statement.setInt(2, directory.getDirectoryID());
             statement.setString(3, directory.getDirectoryName());
-            statement.setInt(4, directory.getDirectorySize());
+            statement.setLong(4, directory.getDirectorySize());
             statement.setInt(5, directory.getNumberOfFiles());
             statement.setString(6, directory.getDirectoryPath());
 
@@ -114,7 +118,7 @@ public class DirectoryDAOImpl extends MySQL implements DirectoryDAO {
             if(rs.next()) {
                 id = rs.getInt(1);
             }
-
+            connection.close();
         } catch (SQLException ex) {
             System.out.println(ex);
         }
@@ -144,7 +148,7 @@ public class DirectoryDAOImpl extends MySQL implements DirectoryDAO {
             if(rs.next()) {
                 id = rs.getInt(1);
             }
-
+            connection.close();
         } catch (SQLException ex) {
             System.out.println(ex);
         }

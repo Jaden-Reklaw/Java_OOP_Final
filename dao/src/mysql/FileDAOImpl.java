@@ -30,6 +30,7 @@ public class FileDAOImpl extends MySQL implements FileDAO {
             if(rs.next()) {
                 file = HydrateObject(rs);
             }
+            connection.close();
         } catch (SQLException ex) {
             logger.error(ex);
         }
@@ -55,6 +56,7 @@ public class FileDAOImpl extends MySQL implements FileDAO {
             while(rs.next()) {
                 fileList.add(HydrateObject(rs));
             }
+            connection.close();
         } catch (SQLException ex) {
             logger.error(ex);
         }
@@ -70,23 +72,22 @@ public class FileDAOImpl extends MySQL implements FileDAO {
 
         try {
             //CALL USP_ExecFile(QueryID, FileID, FileName, FileType, FileSize, FilePath, DirectoryID)
-            String storeProcedure = "{CALL USP_ExecFile(?, ?, ?, ?, ?, ?, ?)}";
+            String storeProcedure = "{CALL USP_ExecFile(?, ?, ?, ?, ?, ?)}";
             CallableStatement statement = connection.prepareCall(storeProcedure);
 
             statement.setInt(1, INSERT);
             statement.setInt(2, 0);
             statement.setString(3, file.getFileName());
             statement.setString(4, file.getFileType());
-            statement.setInt(5, file.getFileSize());
+            statement.setLong(5, file.getFileSize());
             statement.setString(6, file.getFilePath());
-            statement.setInt(7, file.getDirectoryID());
 
             //Execute query and get last id created
             ResultSet rs = statement.executeQuery();
             if(rs.next()) {
                 id = rs.getInt(1);
             }
-
+            connection.close();
         } catch (SQLException ex) {
             System.out.println(ex);
         }
@@ -101,23 +102,22 @@ public class FileDAOImpl extends MySQL implements FileDAO {
 
         try {
             //CALL USP_ExecFile(QueryID, FileID, FileName, FileType, FileSize, FilePath, DirectoryID)
-            String storeProcedure = "{CALL USP_ExecFile(?, ?, ?, ?, ?, ?, ?)}";
+            String storeProcedure = "{CALL USP_ExecFile(?, ?, ?, ?, ?, ?)}";
             CallableStatement statement = connection.prepareCall(storeProcedure);
 
             statement.setInt(1, UPDATE);
             statement.setInt(2, file.getFileID());
             statement.setString(3, file.getFileName());
             statement.setString(4, file.getFileType());
-            statement.setInt(5, file.getFileSize());
+            statement.setLong(5, file.getFileSize());
             statement.setString(6, file.getFilePath());
-            statement.setInt(7, file.getDirectoryID());
 
             //Execute query and get last id created
             ResultSet rs = statement.executeQuery();
             if(rs.next()) {
                 id = rs.getInt(1);
             }
-
+            connection.close();
         } catch (SQLException ex) {
             System.out.println(ex);
         }
@@ -131,8 +131,8 @@ public class FileDAOImpl extends MySQL implements FileDAO {
         int id = 0; //thing to change on return
 
         try {
-            //CALL USP_ExecFile(QueryID, FileID, FileName, FileType, FileSize, FilePath, DirectoryID)
-            String storeProcedure = "{CALL USP_ExecFile(?, ?, ?, ?, ?, ?, ?)}";
+            //CALL USP_ExecFile(QueryID, FileID, FileName, FileType, FileSize, FilePath)
+            String storeProcedure = "{CALL USP_ExecFile(?, ?, ?, ?, ?, ?)}";
             CallableStatement statement = connection.prepareCall(storeProcedure);
 
             statement.setInt(1, DELETE);
@@ -141,14 +141,13 @@ public class FileDAOImpl extends MySQL implements FileDAO {
             statement.setString(4, "");
             statement.setInt(5, 0);
             statement.setString(6, "");
-            statement.setInt(7, 0);
 
             //Execute query and get last id created
             ResultSet rs = statement.executeQuery();
             if(rs.next()) {
                 id = rs.getInt(1);
             }
-
+            connection.close();
         } catch (SQLException ex) {
             System.out.println(ex);
         }
@@ -158,14 +157,13 @@ public class FileDAOImpl extends MySQL implements FileDAO {
     private static File HydrateObject(ResultSet rs) throws SQLException {
         //See what rs object is hydrating the File object
         //Create File Object Use Constructor to Hydrate the object
-        //(int fileID, String fileName, String fileType, int fileSize, String filePath, int directoryID)
+        //(int fileID, String fileName, String fileType, int fileSize, String filePath)
         File file = new File(
                 rs.getInt(1),
                 rs.getString(2),
                 rs.getString(3),
                 rs.getInt(4),
-                rs.getString(5),
-                rs.getInt(6)
+                rs.getString(5)
         );
 
         return file;

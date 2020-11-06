@@ -1,25 +1,24 @@
 package com.astontech.bo;
 
 // 3. Create Objects to represent the 2 db entities
-public class File extends Directory{
+public class File {
     // region Properties
     private int FileID;
     private String FileName;
     private String FileType;
-    private int FileSize;
+    private long FileSize;
     private String FilePath;
     // Don't need DirectoryID since it inherits from Directory Class
     // endregion
 
     // region Constructors
     public File() {} //Default Constructor
-    public File(int fileID, String fileName, String fileType, int fileSize, String filePath, int directoryID) {
+    public File(int fileID, String fileName, String fileType, long fileSize, String filePath) {
         this.setFileID(fileID);
         this.setFileName(fileName);
         this.setFileType(fileType);
         this.setFileSize(fileSize);
         this.setFilePath(filePath);
-        this.setDirectoryID(directoryID);
     }
     // endregion
 
@@ -48,11 +47,11 @@ public class File extends Directory{
         FileType = fileType;
     }
 
-    public int getFileSize() {
+    public long getFileSize() {
         return FileSize;
     }
 
-    public void setFileSize(int fileSize) {
+    public void setFileSize(long fileSize) {
         FileSize = fileSize;
     }
 
