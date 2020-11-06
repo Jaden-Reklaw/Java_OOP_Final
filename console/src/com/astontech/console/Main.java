@@ -1,8 +1,11 @@
 package com.astontech.console;
 
 import com.astontech.bo.Directory;
+import com.astontech.bo.File;
 import com.astontech.dao.DirectoryDAO;
+import com.astontech.dao.FileDAO;
 import mysql.DirectoryDAOImpl;
+import mysql.FileDAOImpl;
 
 import java.util.Date;
 import java.util.List;
@@ -13,6 +16,7 @@ public class Main {
 	// 2. Create a new project in IntelliJ, structure should be similar to OOP project
         System.out.println("Testing Main!");
         //TestDirectoryDAO();
+        TestFileDAO();
     }
 
     public static void TestDirectoryDAO() {
@@ -75,6 +79,65 @@ public class Main {
     }
 
     public static void TestFileDAO() {
+        //region Test Get Collection Files
+        FileDAO fileDAO = new FileDAOImpl();
+        List<File> fileList = fileDAO.getFileList();
+
+        System.out.println("===============================");
+        System.out.println("---Directories Details---");
+        for(File file: fileList) {
+            System.out.println(file.getFileID() + ": " + file.getFileName() + " " + file.getFilePath());
+        }
+        System.out.println("===============================");
+        //endregion
+
+        //region Test Get File By ID
+        File file = fileDAO.getFileById(1);
+        System.out.println("---Directory Details---");
+        System.out.println("Directory Name: " + file.getFileName());
+        System.out.println("===============================");
+        //endregion
+
+        /*
+        //region Test Insert File
+        //(int fileID, String fileName, String fileType, int fileSize, String filePath, int directoryID)
+        File file1 = new File(0, "Operation_Gum_Drop", ".txt", 20, "/home/user1/Desktop/Operation_Gum_Drop.txt", 6);
+
+        FileDAO fileDAO1 = new FileDAOImpl();//??? what is this
+        int id = fileDAO1.insertFile(file1);
+
+        System.out.println("New File Record Inserted. ID: " + id );
+        //endregion
+        */
+
+        /*
+        //region Test Update File
+        //Create instance of File Data Access Object
+        FileDAO fileDAO2 = new FileDAOImpl();
+
+        //Create a file object then use get file by id
+        File file2 = fileDAO2.getFileById(1);
+        file2.setFileName("script.js");
+        file2.setFileType(".js");
+        file2.setFilePath("/home/user1/Desktop/Prime_Academy/script.js");
+
+        if(fileDAO2.updateFile(file2)) {
+            System.out.println("File Update Success!");
+        } else {
+            System.out.println("File Update Fail!");
+        }
+        //endregion
+        */
+
+        //region Test Delete Directory
+        FileDAO fileDAO3 = new FileDAOImpl();
+
+        if(fileDAO3.deleteFile(5)) {
+            System.out.println("Successfully removed File from Database!");
+        } else {
+            System.out.println("Failed to remove File from Database!");
+        }
+        //endregion
 
     }
 }
