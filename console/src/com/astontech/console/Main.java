@@ -9,13 +9,7 @@ import common.helpers.StringHelper;
 import mysql.DirectoryDAOImpl;
 import mysql.FileDAOImpl;
 
-import javax.sound.midi.Soundbank;
 import java.io.IOException;
-import java.sql.Connection;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
-import java.util.Date;
 import java.util.List;
 import java.util.Scanner;
 
@@ -76,11 +70,19 @@ public class Main {
                         //Display Top 5 Biggest Files
                         fileList = fileDAO.getFiveBiggestFiles();
                         for(File file: fileList) {
-                            System.out.println(file.getFileID() + ": " + file.getFileName() + " " + file.getFileSize());
+                            System.out.println(file.getFileID() + ": " + file.getFileName() + " " + MathHelper.getFileSizeMegaBytes(file.getFileSize()));
                         }
                         break;
                     case 4:
                         //Display Files Based on File Type
+                        reader.nextLine();
+                        System.out.println("Type out extension: ");
+                        String extension = reader.nextLine();
+
+                        fileList = fileDAO.getFileBasedExtension(extension);
+                        for(File file: fileList) {
+                            System.out.println(file.getFileID() + ": " + file.getFileName() + " " + MathHelper.getFileSizeMegaBytes(file.getFileSize()));
+                        }
                         break;
                     case 5:
                         //Clear Database and Start Over

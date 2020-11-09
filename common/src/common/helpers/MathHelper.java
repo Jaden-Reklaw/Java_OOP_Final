@@ -3,8 +3,8 @@ package common.helpers;
 import java.io.File;
 
 public class MathHelper {
-    public static String getFileSizeMegaBytes(File file) {
-        return (double) file.length() / (1024 * 1024) + " mb";
+    public static String getFileSizeMegaBytes(long num) {
+        return (double) num / (1024 * 1024) + " mb";
     }
 
     public static long getFolderSize(File folder) {

@@ -182,6 +182,32 @@ public class FileDAOImpl extends MySQL implements FileDAO {
         return fileList;
     }
 
+    //Display Files based off File Extension
+    public List<File> getFileBasedExtension(String extension) {
+        //connect to database from MySQL class using connect method
+        Connect();
+        //not instantiated since if no records returned don't use memory
+        List<File> fileList = new ArrayList<File>();
+
+        try {
+            String storeProcedure = "{CALL USP_GetFile(?, ?, ?)}";
+            CallableStatement cStmt = connection.prepareCall(storeProcedure);
+
+            cStmt.setInt(1, 40);
+            cStmt.setInt(2, 0);
+            cStmt.setString(3, extension);
+            ResultSet rs = cStmt.executeQuery();
+
+            while(rs.next()) {
+                fileList.add(HydrateObject(rs));
+            }
+            connection.close();
+        } catch (SQLException ex) {
+            logger.error(ex);
+        }
+        return fileList;
+    }
+
     private static File HydrateObject(ResultSet rs) throws SQLException {
         //See what rs object is hydrating the File object
         //Create File Object Use Constructor to Hydrate the object
