@@ -23,8 +23,6 @@ public class Main {
 
     public static void main(String[] args) {
 	    interact();
-        //TestDirectoryDAO();
-
     }
 
     public static void interact() {
@@ -60,31 +58,29 @@ public class Main {
 
                 DirectoryDAOImpl directoryDAO = new DirectoryDAOImpl();
                 Directory directory = null;
+                FileDAOImpl fileDAO = new FileDAOImpl();
+                List<File> fileList = null;
                 //Switch
                 switch (choice) {
                     case 1:
                         //Display Directory with Most Files
                         directory = directoryDAO.getDirectoryMostFiles();
-                        System.out.println(
-                                "ID: " + directory.getDirectoryID() +
-                                        " Directory Name: " + directory.getDirectoryName() +
-                                        " Files: " + directory.getNumberOfFiles() + "\n"
-                        );
+                        System.out.println("ID: " + directory.getDirectoryID() + " Directory Name: " + directory.getDirectoryName() + " Files: " + directory.getNumberOfFiles() + "\n");
                         break;
                     case 2:
                         //Display Biggest Directory
                         directory = directoryDAO.getBiggestDirectory();
-                        System.out.println(
-                                "ID: " + directory.getDirectoryID() +
-                                        " Directory Name: " + directory.getDirectoryName() +
-                                        " Directory Size: " + directory.getDirectorySize() + "\n"
-                        );
+                        System.out.println("ID: " + directory.getDirectoryID() + " Directory Name: " + directory.getDirectoryName() + " Directory Size: " + directory.getDirectorySize() + "\n");
                         break;
                     case 3:
-                        System.out.println("Wednesday");
+                        //Display Top 5 Biggest Files
+                        fileList = fileDAO.getFiveBiggestFiles();
+                        for(File file: fileList) {
+                            System.out.println(file.getFileID() + ": " + file.getFileName() + " " + file.getFileSize());
+                        }
                         break;
                     case 4:
-                        System.out.println("Thursday");
+                        //Display Files Based on File Type
                         break;
                     case 5:
                         //Clear Database and Start Over
@@ -103,7 +99,6 @@ public class Main {
             }// innner while loop flag2
 
         } // outer while loop flag1
-
 
         System.out.println("Exiting Program");
     }
