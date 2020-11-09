@@ -23,6 +23,7 @@ public class Main {
 
     public static void main(String[] args) {
 	    interact();
+        //TestDirectoryDAO();
 
     }
 
@@ -57,14 +58,27 @@ public class Main {
                 System.out.println("Choose from the Menu: ");
                 int choice = reader.nextInt();
 
+                DirectoryDAOImpl directoryDAO = new DirectoryDAOImpl();
+                Directory directory = null;
                 //Switch
                 switch (choice) {
                     case 1:
                         //Display Directory with Most Files
-                        System.out.println("Monday");
+                        directory = directoryDAO.getDirectoryMostFiles();
+                        System.out.println(
+                                "ID: " + directory.getDirectoryID() +
+                                        " Directory Name: " + directory.getDirectoryName() +
+                                        " Files: " + directory.getNumberOfFiles() + "\n"
+                        );
                         break;
                     case 2:
-                        System.out.println("Tuesday");
+                        //Display Biggest Directory
+                        directory = directoryDAO.getBiggestDirectory();
+                        System.out.println(
+                                "ID: " + directory.getDirectoryID() +
+                                        " Directory Name: " + directory.getDirectoryName() +
+                                        " Directory Size: " + directory.getDirectorySize() + "\n"
+                        );
                         break;
                     case 3:
                         System.out.println("Wednesday");
@@ -75,8 +89,8 @@ public class Main {
                     case 5:
                         //Clear Database and Start Over
                         flag2 = false;
-                        DirectoryDAOImpl test = new DirectoryDAOImpl();
-                        test.ClearDB();
+                        directoryDAO.ClearDB();
+                        interact();
                         break;
                     case 6:
                         // Exit Program
@@ -103,7 +117,7 @@ public class Main {
                     // Recursion happens here
                     //Values to put into Directory Object
                     //DirectoryName, DirectorySize, NumberOfFiles, DirectoryPath
-                    Directory directory = new Directory(0, file.getName(), file.length(), file.listFiles().length, file.getCanonicalPath());
+                    Directory directory = new Directory(0, file.getName(), MathHelper.getFolderSize(file), file.listFiles().length, file.getCanonicalPath());
 
                     DirectoryDAO directoryDAO = new DirectoryDAOImpl();
                     int id = directoryDAO.insertDirectory(directory);

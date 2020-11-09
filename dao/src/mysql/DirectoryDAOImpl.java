@@ -6,7 +6,7 @@ import com.astontech.dao.DirectoryDAO;
 import java.sql.CallableStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Statement;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -20,12 +20,11 @@ public class DirectoryDAOImpl extends MySQL implements DirectoryDAO {
         Directory directory = null;
 
         try {
-            String storeProcedure = "{CALL USP_GetDirectory(?, ?, ?)}";
+            String storeProcedure = "{CALL USP_GetDirectory(?, ?)}";
             CallableStatement cStmt = connection.prepareCall(storeProcedure);
 
             cStmt.setInt(1, GET_BY_ID);
             cStmt.setInt(2, directoryID);
-            cStmt.setInt(3, 0);
             ResultSet rs = cStmt.executeQuery();
 
             if(rs.next()) {
@@ -47,12 +46,11 @@ public class DirectoryDAOImpl extends MySQL implements DirectoryDAO {
         List<Directory> directoryList = new ArrayList<Directory>();
 
         try {
-            String storeProcedure = "{CALL USP_GetDirectory(?, ?, ?)}";
+            String storeProcedure = "{CALL USP_GetDirectory(?, ?)}";
             CallableStatement cStmt = connection.prepareCall(storeProcedure);
 
             cStmt.setInt(1, GET_COLLECTION);
             cStmt.setInt(2, 0);
-            cStmt.setInt(3, 0);
             ResultSet rs = cStmt.executeQuery();
 
             while(rs.next()) {
@@ -166,12 +164,11 @@ public class DirectoryDAOImpl extends MySQL implements DirectoryDAO {
         Directory directory = null;
 
         try {
-            String storeProcedure = "{CALL USP_GetDirectory(?, ?, ?)}";
+            String storeProcedure = "{CALL USP_GetDirectory(?, ?)}";
             CallableStatement cStmt = connection.prepareCall(storeProcedure);
 
             cStmt.setInt(1, 30);
             cStmt.setInt(2, 0);
-            cStmt.setInt(3, 0);
             ResultSet rs = cStmt.executeQuery();
 
             if(rs.next()) {
@@ -180,7 +177,31 @@ public class DirectoryDAOImpl extends MySQL implements DirectoryDAO {
             connection.close();
         } catch (SQLException ex) {
             logger.error(ex);
+        }
+        return directory;
+    }
 
+    //Display Biggest Directory
+    public Directory getBiggestDirectory() {
+        //connect to database from MySQL class using connect method
+        Connect();
+        //not instantiated since if no records returned don't use memory
+        Directory directory = null;
+
+        try {
+            String storeProcedure = "{CALL USP_GetDirectory(?, ?)}";
+            CallableStatement cStmt = connection.prepareCall(storeProcedure);
+
+            cStmt.setInt(1, 40);
+            cStmt.setInt(2, 0);
+            ResultSet rs = cStmt.executeQuery();
+
+            if(rs.next()) {
+                directory = HydrateObject(rs);
+            }
+            connection.close();
+        } catch (SQLException ex) {
+            logger.error(ex);
         }
         return directory;
     }
