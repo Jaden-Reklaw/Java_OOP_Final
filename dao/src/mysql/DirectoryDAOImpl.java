@@ -6,6 +6,7 @@ import com.astontech.dao.DirectoryDAO;
 import java.sql.CallableStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -19,11 +20,12 @@ public class DirectoryDAOImpl extends MySQL implements DirectoryDAO {
         Directory directory = null;
 
         try {
-            String storeProcedure = "{CALL USP_GetDirectory(?, ?)}";
+            String storeProcedure = "{CALL USP_GetDirectory(?, ?, ?)}";
             CallableStatement cStmt = connection.prepareCall(storeProcedure);
 
             cStmt.setInt(1, GET_BY_ID);
             cStmt.setInt(2, directoryID);
+            cStmt.setInt(3, 0);
             ResultSet rs = cStmt.executeQuery();
 
             if(rs.next()) {
@@ -45,11 +47,12 @@ public class DirectoryDAOImpl extends MySQL implements DirectoryDAO {
         List<Directory> directoryList = new ArrayList<Directory>();
 
         try {
-            String storeProcedure = "{CALL USP_GetDirectory(?, ?)}";
+            String storeProcedure = "{CALL USP_GetDirectory(?, ?, ?)}";
             CallableStatement cStmt = connection.prepareCall(storeProcedure);
 
             cStmt.setInt(1, GET_COLLECTION);
             cStmt.setInt(2, 0);
+            cStmt.setInt(3, 0);
             ResultSet rs = cStmt.executeQuery();
 
             while(rs.next()) {
@@ -153,6 +156,58 @@ public class DirectoryDAOImpl extends MySQL implements DirectoryDAO {
             System.out.println(ex);
         }
         return id > 0;
+    }
+
+    //Display Directory with Most Files
+    public Directory getDirectoryMostFiles() {
+        //connect to database from MySQL class using connect method
+        Connect();
+        //not instantiated since if no records returned don't use memory
+        Directory directory = null;
+
+        try {
+            String storeProcedure = "{CALL USP_GetDirectory(?, ?, ?)}";
+            CallableStatement cStmt = connection.prepareCall(storeProcedure);
+
+            cStmt.setInt(1, 30);
+            cStmt.setInt(2, 0);
+            cStmt.setInt(3, 0);
+            ResultSet rs = cStmt.executeQuery();
+
+            if(rs.next()) {
+                directory = HydrateObject(rs);
+            }
+            connection.close();
+        } catch (SQLException ex) {
+            logger.error(ex);
+
+        }
+        return directory;
+    }
+
+    public static void ClearDB() {
+        //Connect to database
+        Connect();
+
+        try {
+            //CALL USP_ExecDirectory(QueryID, DirectoryID, DirectoryName, DirectorySize, NumberOfFiles, DirectoryPath);
+            String storeProcedure = "{CALL USP_ExecDirectory(?, ?, ?, ?, ?, ?)}";
+            CallableStatement statement = connection.prepareCall(storeProcedure);
+
+            statement.setInt(1, 40);
+            statement.setInt(2, 0);
+            statement.setString(3, "");
+            statement.setInt(4, 0);
+            statement.setInt(5, 0);
+            statement.setString(6, "");
+
+            //Execute query
+            statement.executeQuery();
+            connection.close();
+        } catch (SQLException ex) {
+            System.out.println(ex);
+        }
+        System.out.println("Database Cleared");
     }
 
     private static Directory HydrateObject(ResultSet rs) throws SQLException {

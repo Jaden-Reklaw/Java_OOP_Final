@@ -20,11 +20,12 @@ public class FileDAOImpl extends MySQL implements FileDAO {
         File file = null;
 
         try {
-            String storeProcedure = "{CALL USP_GetFile(?, ?)}";
+            String storeProcedure = "{CALL USP_GetFile(?, ?, ?)}";
             CallableStatement cStmt = connection.prepareCall(storeProcedure);
 
             cStmt.setInt(1, GET_BY_ID);
             cStmt.setInt(2, fileID);
+            cStmt.setInt(3, 0);
             ResultSet rs = cStmt.executeQuery();
 
             if(rs.next()) {
@@ -46,11 +47,12 @@ public class FileDAOImpl extends MySQL implements FileDAO {
         List<File> fileList = new ArrayList<File>();
 
         try {
-            String storeProcedure = "{CALL USP_GetFile(?, ?)}";
+            String storeProcedure = "{CALL USP_GetFile(?, ?, ?)}";
             CallableStatement cStmt = connection.prepareCall(storeProcedure);
 
             cStmt.setInt(1, GET_COLLECTION);
             cStmt.setInt(2, 0);
+            cStmt.setInt(3, 0);
             ResultSet rs = cStmt.executeQuery();
 
             while(rs.next()) {
@@ -71,7 +73,7 @@ public class FileDAOImpl extends MySQL implements FileDAO {
         int id = 0; //thing to change on return
 
         try {
-            //CALL USP_ExecFile(QueryID, FileID, FileName, FileType, FileSize, FilePath, DirectoryID)
+            //CALL USP_ExecFile(QueryID, FileID, FileName, FileType, FileSize, FilePath)
             String storeProcedure = "{CALL USP_ExecFile(?, ?, ?, ?, ?, ?)}";
             CallableStatement statement = connection.prepareCall(storeProcedure);
 
@@ -101,7 +103,7 @@ public class FileDAOImpl extends MySQL implements FileDAO {
         int id = 0; //thing to change on return
 
         try {
-            //CALL USP_ExecFile(QueryID, FileID, FileName, FileType, FileSize, FilePath, DirectoryID)
+            //CALL USP_ExecFile(QueryID, FileID, FileName, FileType, FileSize, FilePath)
             String storeProcedure = "{CALL USP_ExecFile(?, ?, ?, ?, ?, ?)}";
             CallableStatement statement = connection.prepareCall(storeProcedure);
 

@@ -11,6 +11,10 @@ import mysql.FileDAOImpl;
 
 import javax.sound.midi.Soundbank;
 import java.io.IOException;
+import java.sql.Connection;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.Date;
 import java.util.List;
 import java.util.Scanner;
@@ -18,32 +22,82 @@ import java.util.Scanner;
 public class Main {
 
     public static void main(String[] args) {
-	    // 2. Create a new project in IntelliJ, structure should be similar to OOP project
-
-        /*
-            5. Create a menu driven console application that allow the following:
-        a. Prompts the user for a starting directory
-        b. The application would then recursively collect the following and store them in appropriate db entitity
-            v. Directory Name
-            vi. Directory Size (in MB)
-            vii. Number of Files in Directory
-            viii. Directory Path
-
-        */
-
-        //
-        Scanner reader = new Scanner(System.in);
-        System.out.println("Please select a starting directory: ");
-        String dir = reader.nextLine();
-
-        recursionFiles(new java.io.File(dir));
+	    interact();
 
     }
 
-    private static void recursionFiles(java.io.File dir) {
+    public static void interact() {
+        // 2. Create a new project in IntelliJ, structure should be similar to OOP project
+        // 5. Create a menu driven console application that allow the following:
+        boolean flag1 = true;
+        boolean flag2 = true;
+
+        while(flag1) {
+            //a. Prompts the user for a starting directory
+            Scanner reader = new Scanner(System.in);
+            System.out.println("Please select a starting directory: ");
+            String dir = reader.nextLine();
+
+            //b. The application would then recursively collect the following and store them in appropriate db entitity
+            System.out.println("One moment while information is being transferred to the database.");
+            recursionFiles(new java.io.File(dir));
+            System.out.println("\n Information Uploaded successfully! \n");
+
+            while (flag2) {
+                //Menu
+                System.out.println("---Menu---");
+                System.out.println("1: Display Directory with Most Files");
+                System.out.println("2: Display Biggest Directory");
+                System.out.println("3: Display Top 5 Biggest Files");
+                System.out.println("4: Display Files Based on File Type");
+                System.out.println("5: Clear Database and Start Over");
+                System.out.println("6: Exit Program");
+
+                //Choose from Menu
+                System.out.println("Choose from the Menu: ");
+                int choice = reader.nextInt();
+
+                //Switch
+                switch (choice) {
+                    case 1:
+                        //Display Directory with Most Files
+                        System.out.println("Monday");
+                        break;
+                    case 2:
+                        System.out.println("Tuesday");
+                        break;
+                    case 3:
+                        System.out.println("Wednesday");
+                        break;
+                    case 4:
+                        System.out.println("Thursday");
+                        break;
+                    case 5:
+                        //Clear Database and Start Over
+                        flag2 = false;
+                        DirectoryDAOImpl test = new DirectoryDAOImpl();
+                        test.ClearDB();
+                        break;
+                    case 6:
+                        // Exit Program
+                        flag2 = false;
+                        flag1 = false;
+                        break;
+                    default:
+                        System.out.println("Please choose a number from 1 to 6");
+                }
+            }// innner while loop flag2
+
+        } // outer while loop flag1
+
+
+        System.out.println("Exiting Program");
+    }
+
+    public static void recursionFiles(java.io.File dir) {
         try{
             java.io.File[] files = dir.listFiles();
-
+            System.out.print(".");
             for(java.io.File file : files) {
                 if(file.isDirectory()){
                     // Recursion happens here
